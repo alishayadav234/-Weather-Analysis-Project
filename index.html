@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #74ebd5, #9face6);
+        }
+
+        .container {
+            width: 400px;
+            background: white;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        input {
+            padding: 8px;
+            width: 200px;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin-top: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🌡 Weather App</h2>
+
+    <form method="POST">
+        <input type="text" name="city" placeholder="Enter City">
+        <br>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    {% if result %}
+        {% if result.error %}
+            <p>{{ result.error }}</p>
+        {% else %}
+            <h3>Result:</h3>
+            <p>City: {{ result.city }}</p>
+            <p>Temperature: {{ result.temp }} °C</p>
+            <p>Humidity: {{ result.humidity }}%</p>
+
+            <canvas id="chart"></canvas>
+
+            <script>
+                var ctx = document.getElementById('chart').getContext('2d');
+
+                var dataVals = ["{{ result.temp }}", "{{ result.humidity }}"].map(Number);
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Temperature', 'Humidity'],
+                        datasets: [{
+                            label: 'Weather Data',
+                            data: dataVals,
+                            borderWidth: 1
+                        }]
+                    }
+                });
+            </script>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+</body>
+</html>
